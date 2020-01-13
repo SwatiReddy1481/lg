@@ -29,7 +29,7 @@ export default class AssignComponent extends React.Component {
 		super(props)
 		this.state = {
             open: props.openDialogue,
-			currentTab: "inhouse_members",
+			currentTab: "assigned_members",
 			selectedList : []
 		}
 	}
@@ -46,7 +46,41 @@ export default class AssignComponent extends React.Component {
     };
     setTab = (type) => {
         this.setState({ currentTab: type });
-    }
+	}
+	renderMembers = (member) =>{
+		let members = this.props.assignData && this.props.assignData[member];
+		console.log(members)
+		return (
+			// <Box display="flex" className="each-employee-section" justifyContent="space-between">
+			// 	<FaceIcon />
+			// 	{members && members.map((item,key) => {
+			// 		return <div>
+			// 				<div>{item.name}</div>
+			// 				<div>{item.role_name}</div>
+			// 			</div>
+			// 	})}
+			// 	<Checkbox
+			// 		onChange={this.handleChange}
+			// 		value="primary"
+			// 		inputProps={{ 'aria-label': 'primary checkbox' }}
+			// 	/>
+			// </Box>
+			<div>
+			{ members && members.map((item,key) => { 
+				return <Box display="flex" className="each-employee-section" justifyContent="space-between" key='key'>
+					<FaceIcon />
+					<div>{item.name}</div>
+					{/* <div>{item.role_name}</div> */}
+					<Checkbox
+					onChange={this.handleChange}
+					value="primary"
+					inputProps={{ 'aria-label': 'primary checkbox' }}
+					/>
+				</Box>
+			})}
+			</div>
+		)
+	}
 	render() {
 		return (
 			<div>
@@ -60,13 +94,14 @@ export default class AssignComponent extends React.Component {
 					<DialogContent>
 						<List className="navbar-nav mr-auto">
 							<Box display="flex" p={1} justifyContent="space-between" className="employee-nav-links" bgcolor="background.paper">
-								<ListItem onClick={()=> {this.setTab("nearByEmployees")} }>Nearby Employees</ListItem>
+								{/* <ListItem onClick={()=> {this.setTab("nearByEmployees")} }>Nearby Employees</ListItem> */}
+								<ListItem onClick={()=> {this.setTab("assigned_members")} }>Assigned Employees</ListItem>
+								<ListItem onClick={()=> {this.setTab("applied_members")} }>Applied Employees</ListItem>
 								<ListItem onClick={()=> {this.setTab("assigned_members")} }>Previously Worked Employees</ListItem>
-								<ListItem onClick={()=> {this.setTab("inhouse_members")} }>InHouseEmployees</ListItem>
+								<ListItem onClick={()=> {this.setTab("inhouse_members")} }>In-House Employees</ListItem>
 								{/* <ListItem onClick={()=> {this.setTab("applied_members")} }>Applied Employees</ListItem> */}
 							</Box>
 						</List>
-						<Box>
 							{/* {
 								this.props.assignData[this.state.currentTab].map( item => {
 									return (
@@ -83,23 +118,13 @@ export default class AssignComponent extends React.Component {
 								</Chip><Chip className="each-notification" icon={<FaceIcon />} label="Deletable primary notification. for more details please contact in person" onDelete={this.handleDelete} color="" >
 								<div> hello</div>
 							</Chip> */}
+							
 							<Box display="flex" className="all-employee-sections-container" justifyContent="space-between">
-								<Box display="flex" className="each-employee-section" justifyContent="space-between">
-									<FaceIcon />
-									<div>
-										{"name"}
-										{"Role"}
-									</div>
-									<div>
-									<Checkbox
-										
-										onChange={this.handleChange}
-										value="primary"
-										inputProps={{ 'aria-label': 'primary checkbox' }}
-									/>
-									</div>
-								</Box>
-								<Box display="flex" className="each-employee-section" justifyContent="space-between">
+								{this.state.currentTab === 'assigned_members' && this.renderMembers('assigned_members')}
+								{this.state.currentTab === 'applied_members' && this.renderMembers('applied_members')}
+								{this.state.currentTab === 'inhouse_members' && this.renderMembers('inhouse_members')}
+								
+								{/* <Box display="flex" className="each-employee-section" justifyContent="space-between">
 									<FaceIcon />
 									<div>
 										{"name"}
@@ -141,7 +166,7 @@ export default class AssignComponent extends React.Component {
 									/>
 									</div>
 								</Box>
-								<Box display="flex" className="each-employee-section" justifyContent="space-between">
+								<Box display="flex" className="each-employee-section" justifyContent="space-between"> 
 									<FaceIcon />
 									<div>
 										{"name"}
@@ -154,9 +179,8 @@ export default class AssignComponent extends React.Component {
 										inputProps={{ 'aria-label': 'primary checkbox' }}
 									/>
 									</div>
-								</Box>
+								</Box> */}
 							</Box>
-						</Box>
 						<Button variant="contained" className="company-view-actions-save" color="primary" onClick={this.assignEmployees}> Assign </Button>
                         <Button variant="contained" className="company-view-actions-cancel" onClick={this.handleClose}>  Cancel </Button>
 					</DialogContent>
